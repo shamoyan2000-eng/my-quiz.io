@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Магический Квиз</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: radial-gradient(circle, #16001f, #000);
+    color: #fff;
+    text-align: center;
+    overflow-x: hidden;
+}
+
+.question {
+    background: #1e1e1e;
+    margin: 20px auto;
+    padding: 15px;
+    border-radius: 14px;
+    max-width: 600px;
+    position: relative;
+}
+
+.correct {
+    border: 2px solid #00ffcc;
+    box-shadow: 0 0 20px #00ffcc;
+}
+.wrong {
+    border: 2px solid #ff4444;
+    box-shadow: 0 0 20px #ff4444;
+}
+
+button {
+    padding: 14px 30px;
+    font-size: 18px;
+    margin: 25px;
+    border-radius: 12px;
+    border: none;
+    background: linear-gradient(45deg,#7b2cff,#c77dff);
+    color: white;
+    cursor: pointer;
+}
+
+#final {
+    display: none;
+    animation: reveal 2s ease;
+}
+
+@keyframes reveal {
+    from {opacity:0; transform: scale(0.7);}
+    to {opacity:1; transform: scale(1);}
+}
+
+img {
+    max-width: 90%;
+    border-radius: 25px;
+    box-shadow: 0 0 50px gold;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🪄 Магический квиз</h1>
+
+<div id="quiz"></div>
+
+<button onclick="check()">Произнести заклинание</button>
+
+<!-- 🔥 ТУТ БУДЕТ ТВОЁ ФОТО -->
+<div id="final">
+    <h2>✨ Магия сработала!</h2>
+    <img src="photo.jpg" alt="Твоё фото">
+</div>
+
+<script>
+const quiz = [
+{q:"Лучший друг Гарри Поттера?", a:["Драко","Рон","Невилл"], c:1},
+{q:"Фамилия Гермионы?", a:["Уизли","Грейнджер","Лавгуд"], c:1},
+{q:"Школа магии?", a:["Дурмстранг","Хогвартс","Шармбатон"], c:1},
+{q:"Директор Хогвартса?", a:["Снейп","Макгонагалл","Дамблдор"], c:2},
+{q:"Факультет Гарри?", a:["Слизерин","Гриффиндор","Когтевран"], c:1},
+{q:"Главный злодей?", a:["Люциус","Волдеморт","Беллатриса"], c:1},
+{q:"Игра на метлах?", a:["Квиддич","Поло","Регби"], c:0},
+{q:"Заклинание света?", a:["Люмос","Экспеллиармус","Авада"], c:0},
+{q:"Крестный Гарри?", a:["Римус","Сириус","Джеймс"], c:1},
+{q:"Имя совы Гарри?", a:["Букля","Хедвиг","Луна"], c:1},
+
+// детективные
+{q:"Что становится больше, если перевернуть?", a:["9","6","0"], c:1},
+{q:"Что всегда впереди, но не приходит?", a:["Прошлое","Завтра","Сегодня"], c:1},
+{q:"Ключи есть, замков нет?", a:["Карта","Пианино","Дом"], c:1},
+{q:"Можно сломать, не касаясь?", a:["Обещание","Стекло","Тень"], c:0},
+{q:"Чем больше берешь — тем больше остается?", a:["Деньги","Следы","Время"], c:1}
+];
+
+const quizDiv = document.getElementById("quiz");
+
+quiz.forEach((item, i) => {
+    const div = document.createElement("div");
+    div.className = "question";
+    div.id = "q"+i;
+    div.innerHTML = `<p>${i+1}. ${item.q}</p>`;
+    item.a.forEach((ans, j) => {
+        div.innerHTML += `
+        <label>
+        <input type="radio" name="q${i}" value="${j}"> ${ans}
+        </label><br>`;
+    });
+    quizDiv.appendChild(div);
+});
+
+function check() {
+    let allCorrect = true;
+
+    quiz.forEach((item, i) => {
+        const block = document.getElementById("q"+i);
+        block.classList.remove("correct","wrong");
+
+        const sel = document.querySelector(`input[name="q${i}"]:checked`);
+        if (sel && parseInt(sel.value) === item.c) {
+            block.classList.add("correct");
+        } else {
+            block.classList.add("wrong");
+            allCorrect = false;
+        }
+    });
+
+    if (allCorrect) {
+        quizDiv.style.display = "none";
+        document.querySelector("button").style.display = "none";
+        document.getElementById("final").style.display = "block";
+        window.scrollTo({top:0,behavior:"smooth"});
+    }
+}
+</script>
+
+</body>
+</html>
